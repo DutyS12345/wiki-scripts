@@ -111,12 +111,16 @@ def process_challenge(challenge_id, challenge_data):
 		if 400 in qids:
 			challenge_data["modes"] = challenge_data.get("modes", {})
 			challenge_data["modes"]["SR 5v5 Draft Pick"] = True
-		if 410 in qids:
-			challenge_data["modes"] = challenge_data.get("modes", {})
-			challenge_data["modes"]["SR 5v5 Blind Pick"] = True			
+		# game mode deprecated in patch 6.22
+		# if 410 in qids:
+		# 	challenge_data["modes"] = challenge_data.get("modes", {})
+		# 	challenge_data["modes"]["SR 5v5 Ranked Dynamic"] = True
 		if 420 in qids or 422 in qids:
 			challenge_data["modes"] = challenge_data.get("modes", {})
 			challenge_data["modes"]["SR 5v5 Ranked Solo"] = True
+		if 430 in qids:
+			challenge_data["modes"] = challenge_data.get("modes", {})
+			challenge_data["modes"]["SR 5v5 Blind Pick"] = True			
 		if 440 in qids or 442 in qids:
 			challenge_data["modes"] = challenge_data.get("modes", {})
 			challenge_data["modes"]["SR 5v5 Ranked Flex"] = True
@@ -136,13 +140,15 @@ def process_challenge(challenge_id, challenge_data):
 				challenge_data["group"] = data["challenges"][challenge_data["tags"][tag]]["name"]
 		del challenge_data["tags"]
 	if int(challenge_id) > 600000 and "group" not in challenge_data:
-		challenge_data["group"] = "LEGACY"
+		challenge_data["group"] = "Legacy"
 	return
 	
 
 if __name__ == "__main__":
 	with open('challenges.json') as f:
 		data = json.load(f)
+	with open('challenges_pretty.json', 'w') as f:
+		f.write(json.dumps(data, indent=4))
 	# examine the data and print info about the data
 	print(data.keys())
 	examine_results = {}
@@ -152,6 +158,8 @@ if __name__ == "__main__":
 		print(key, " : ", examine_results[key])
 
 	# modify the data
+	for i in range(0,6):
+		data["challenges"][str(i)]["name"] = data["challenges"][str(i)]["name"].title()
 	for challenge_id in data["challenges"]:
 		process_challenge(challenge_id, data["challenges"][challenge_id])
 	temp = {}
