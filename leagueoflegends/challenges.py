@@ -2,6 +2,8 @@ import json
 import luadata
 import re
 
+import subprocess
+
 ranks = [
 	"IRON",
 	"BRONZE",
@@ -22,6 +24,7 @@ def examine_challenge(challenge_id, challenge_data, ret):
 	priorities_list = ret.get("priorities_list", {})
 	reward_cat_list = ret.get("reward_cat_list", {})
 	reward_quantity_list = ret.get("reward_quantity_list", {})
+	leaderboard_outlier_list = ret.get("leaderboard_outlier_list", [])
 	ret["audit"] = audit
 	ret["source_list"] = source_list
 	ret["queue_id_list"] = queue_id_list
@@ -29,12 +32,18 @@ def examine_challenge(challenge_id, challenge_data, ret):
 	ret["priorities_list"] = priorities_list
 	ret["reward_cat_list"] = reward_cat_list
 	ret["reward_quantity_list"] = reward_quantity_list
+	ret["leaderboard_outlier_list"] = leaderboard_outlier_list
 	if "reverseDirection" in challenge_data:
 		# if challenge_data["reverseDirection"] == True:
 		# 	audit.append(challenge_id)
 		pass
 	if "thresholds" in challenge_data:
 		thresholds = challenge_data["thresholds"]
+		if ("CHALLENGER" in challenge_data["thresholds"] or "GRANDMASTER" in challenge_data["thresholds"]) and "leaderboard" in challenge_data and challenge_data["leaderboard"] == False:
+			leaderboard_outlier_list.append(challenge_id)
+		if ("CHALLENGER" not in challenge_data["thresholds"] and "GRANDMASTER" not in challenge_data["thresholds"]) and "leaderboard" in challenge_data and challenge_data["leaderboard"] == True:
+			leaderboard_outlier_list.append(challenge_id)
+
 		for rank in ranks:
 			if rank in thresholds and "rewards" in thresholds[rank]:
 				for reward in thresholds[rank]["rewards"]:
@@ -190,3 +199,6 @@ if __name__ == "__main__":
 	lua_string = "return " + lua_string 
 	with open('new_challenges.lua', 'w') as f:
 		f.write(lua_string)
+
+	with open('new_challenges_ro.lua', 'w') as out:
+		subprocess.run(['lua', '-l' , 'reorder', '-e' , 'print(p.reorderDataModule("challenges", require("new_challenges")))'], stdout=out.fileno())
