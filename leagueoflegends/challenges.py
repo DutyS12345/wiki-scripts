@@ -1,6 +1,8 @@
 import json
 import luadata
 import re
+import os
+import sys
 
 import subprocess
 
@@ -81,7 +83,7 @@ def examine_challenge(challenge_id, challenge_data, ret):
 				prio = challenge_data["tags"]["priority"]
 				priorities_list[prio] = priorities_list.get(prio, 0) + 1
 
-def process_challenge(challenge_id, challenge_data):
+def process_challenge(data, challenge_id, challenge_data):
 	challenge_data["id"] = int(challenge_id)
 	if "levelToIconPath" in challenge_data:
 		del challenge_data["levelToIconPath"]
@@ -153,11 +155,20 @@ def process_challenge(challenge_id, challenge_data):
 	return
 	
 
-if __name__ == "__main__":
-	with open('challenges.json') as f:
+def main():
+	path = sys.argv[1]
+	if(not os.path.isfile(path)):
+		print("File not found: " + path)
+		return
+	[filename, ext] = os.path.splitext(path)
+	if(ext != '.json'):
+		print("File does not have .json extension: " + path)
+	
+	with open(path) as f:
 		data = json.load(f)
-	with open('challenges_pretty.json', 'w') as f:
+	with open(filename + '_pretty.json', 'w') as f:
 		f.write(json.dumps(data, indent=4))
+	
 	# examine the data and print info about the data
 	print(data.keys())
 	examine_results = {}
@@ -170,7 +181,7 @@ if __name__ == "__main__":
 	for i in range(0,6):
 		data["challenges"][str(i)]["name"] = data["challenges"][str(i)]["name"].title()
 	for challenge_id in data["challenges"]:
-		process_challenge(challenge_id, data["challenges"][challenge_id])
+		process_challenge(data, challenge_id, data["challenges"][challenge_id])
 	temp = {}
 	for challenge_id in data["challenges"].keys():
 		temp[challenge_id] = True
@@ -197,8 +208,11 @@ if __name__ == "__main__":
 	lua_string = re.sub(r'(\w+) =', r'["\1"] =', lua_string)
 	lua_string = re.sub(r'(?:<em>)|(?:</em>)', r"''", lua_string)
 	lua_string = "return " + lua_string 
-	with open('new_challenges.lua', 'w') as f:
+	with open(filename + '_new.lua', 'w') as f:
 		f.write(lua_string)
 
-	with open('new_challenges_ro.lua', 'w') as out:
+	with open(filename + '_new_ro.lua', 'w') as out:
 		subprocess.run(['lua', '-l' , 'reorder', '-e' , 'print(p.reorderDataModule("challenges", require("new_challenges")))'], stdout=out.fileno())
+
+if __name__ == "__main__":
+	main()
