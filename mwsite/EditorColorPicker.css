@@ -1,0 +1,33 @@
+.ecp-inputs-preview-wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1em;
+}
+
+.ecp-inputs {
+    flex: 1 1 auto;
+}
+
+.ecp-preview {
+    flex: 1 1 auto;
+}
+
+.ecp-preview>.ecp-preview-box {
+    overflow: auto;
+    white-space: pre-wrap;
+}
+
+.ecp-codemirror-skin {
+    position: relative;
+}
+
+.ecp-skin-toggle {
+    position: absolute;
+    right: 0;
+    top: 6px;
+}
+
+.ecp-skin-toggle.oo-ui-layout.oo-ui-labelElement.oo-ui-fieldLayout>.oo-ui-fieldLayout-body>.oo-ui-fieldLayout-header,
+.ecp-skin-toggle.oo-ui-layout.oo-ui-labelElement.oo-ui-fieldLayout>.oo-ui-fieldLayout-body>.oo-ui-fieldLayout-field {
+    width: auto;
+}
