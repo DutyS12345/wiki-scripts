@@ -10,6 +10,3 @@ This script creates a calculator y=f(x) defined as a list of coordinates connect
   data-xlabel="MS After Soft Caps" data-ylabel="MS Before Soft Caps" data-title="MS Soft Caps Calculator"
 ></div>
 ```
-
-## TODO
-* Update to be Fandom-agnostic

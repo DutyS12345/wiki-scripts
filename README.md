@@ -1,2 +1,2 @@
-# Fandom
-various scripts intended for use on Fandom wikis
+# wiki-scripts
+Various scripts intended for use on mediawiki wikis.
