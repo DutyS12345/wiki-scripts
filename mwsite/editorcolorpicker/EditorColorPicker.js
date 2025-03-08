@@ -45,8 +45,8 @@
             'table': 'Table',
         };
         var codeMirrorSkins = [
-            'theme-fandomdesktop-dark',
-            'theme-fandomdesktop-light',
+            'theme-fandomdesktop-dark', // Fandom only
+            'theme-fandomdesktop-light', // Fandom only
         ];
         var codeMirrorSkinNames = {
             'theme-fandomdesktop-dark': 'FandomDesktop Dark',
