@@ -1,3 +1,4 @@
+window.ecpButton = true;
 // <pre>
 (function (window, $, mw) {
     'use strict';
@@ -12,6 +13,7 @@
         'wgServerName',
         'wgSiteName',
         'wgUserName',
+        'wgArticlePath',
         'skin',
     ]);
 
@@ -45,13 +47,23 @@
             'table': 'Table',
         };
         var codeMirrorSkins = [
-            'theme-fandomdesktop-dark', // Fandom only
-            'theme-fandomdesktop-light', // Fandom only
+            'vector-theme-dark',
+            'vector-theme-light',
+            // 'theme-fandomdesktop-dark', // Fandom only
+            // 'theme-fandomdesktop-light', // Fandom only
         ];
         var codeMirrorSkinNames = {
+            'vector-theme-dark': 'Vector Dark',
+            'vector-theme-light': 'Vector Light',
             'theme-fandomdesktop-dark': 'FandomDesktop Dark',
             'theme-fandomdesktop-light': 'FandomDesktop Light',
         };
+        var codeMirrorSkinSelectors = {
+            'wg-vector-theme-dark': '.skin-vector .wgl-theme-dark',
+            'wg-vector-theme-dark': '.skin-vector .wgl-theme-light',
+            'theme-fandomdesktop-dark': '.theme-fandomdesktop-dark', // Fandom only
+            'theme-fandomdesktop-light': '.theme-fandomdesktop-light', // Fandom only
+        }
         var codeMirrorPreviewText =
             '<span class="ecp-template-t1">{{template1|</span><span class="ecp-template-t2">{{template2|</span><span class="ecp-template-t3">{{template3|test3}}</span><span class="ecp-template-t2">|test2}}</span><span class="ecp-template-t1">|test1}}</span>\n' +
             '<span class="ecp-template-t1">{{template1\n|</span><span class="ecp-template-param">param1 =</span><span class="ecp-template-t1"> value1\n|</span><span class="ecp-template-param">param2 =</span><span class="ecp-template-t1"> value2\n}}</span>\n' +
@@ -68,6 +80,24 @@
             '<span class="ecp-markup">__NOTOC__</span>\n' +
             '<span class="ecp-table">{|\n|+ </span>Caption<span class="ecp-table">\n! </span>Header Cell<span class="ecp-table">\n|-\n| </span>Data Cell<span class="ecp-table">\n|}</span>';
 
+        // util functions
+        function getSkinSelector(skin) {
+            return codeMirrorSkinSelectors[skin];
+        }
+
+        function getSkinElementId(skin) {
+            return `ecp-${skin}`;
+        }
+
+        function getItemElementId(skin, item) {
+            return `ecp-${skin}__${item}`;
+        }
+
+        function getItemInputValue(skin, item) {
+            return $(`#${getItemElementId(skin, item)}`).val();
+        }
+
+        // save button
         function saveCodeMirrorColors() {
             var codeMirrorSelectors = {
                 'template-t1': [
@@ -239,21 +269,27 @@
             var cssText = '';
             for (var i = 0; i < codeMirrorSkins.length; i++) {
                 var skin = codeMirrorSkins[i];
-                var skinDisabled = $('#ecp-' + skin + ' .ecp-skin-toggle .oo-ui-toggleWidget').attr('aria-checked') == 'false';
-                cssText += '/* ' + codeMirrorSkinNames[skin] + (skinDisabled ? ' disabled' : '') + ' */\n';
+                var skinDisabled = $(`#${getSkinElementId(skin)} .ecp-skin-toggle .oo-ui-toggleWidget`).attr('aria-checked') === 'false';
+                cssText += `/* ${codeMirrorSkinNames[skin]}${skinDisabled ? ' disabled' : ''} */\n`;
 
                 for (var j = 0; j < codeMirrorItems.length; j++) {
                     var item = codeMirrorItems[j];
+                    let itemCssText = '';
                     if (skinDisabled) {
-                        cssText += '/* ' + skin + ' ' + item + ' */\n\t/* color: ' + $('#ecp-' + skin + '__' + item).val() + '; */\n';
+                        itemCssText += `'/* ${skin} ${item} */\n`
+                        itemCssText += `\t/* color: ${getItemInputValue(skin, item)}; */\n`;
                     } else {
                         var selectors = codeMirrorSelectors[item];
                         for (var k = 0; k < selectors.length - 1; k++) {
-                            cssText += '.' + skin + ' ' + selectors[k] + ',\n';
+                            itemCssText += `${getSkinSelector(skin)} ${selectors[k]},\n`;
                         }
-                        cssText += '.' + skin + ' ' + selectors[k];
-                        cssText += ' {\n/* ' + skin + ' ' + item + ' */\n\tcolor: ' + $('#ecp-' + skin + '__' + item).val() + ';\n}\n';
+                        itemCssText += `${getSkinSelector(skin)} ${selectors[k]}`;
+                        itemCssText += ' {\n'
+                        itemCssText += `/* ${skin} ${item} */\n`
+                        itemCssText += `\tcolor: ${getItemInputValue(skin, item)};\n`
+                        itemCssText += `}\n`;
                     }
+                    cssText += itemCssText;
                 }
                 cssText += '\n';
             }
@@ -273,6 +309,7 @@
             });
         }
 
+        // link button
         function linkCodeMirrorColors() {
             var api = new mw.Api();
             api.get({
@@ -326,11 +363,11 @@
             var colorPreview = $('<div>', { 'class': 'ecp-preview' }).append($('<h3>').text('Preview:')).append($('<pre>', { 'class': 'ecp-preview-box' }).html(codeMirrorPreviewText));
             codeMirrorItems.forEach(function (item) {
                 var itemText = codeMirrorItemText[item];
-                var itemID = 'ecp-' + skin + '__' + item;
+                var itemID = getItemElementId(skin, item);
                 colorInputs
                     .append($('<div>')
                         .append($('<input>', { 'type': 'color', 'id': itemID, 'name': itemID }).on("input", function (event) {
-                            $('#ecp-' + skin + ' .ecp-preview  .ecp-' + item).css('color', event.target.value);
+                            $('#' + getSkinElementId(skin) + ' .ecp-preview  .ecp-' + item).css('color', event.target.value);
                         }))
                         .append(' ')
                         .append($('<label>', { 'for': itemID })
@@ -341,8 +378,8 @@
             var skinToggleSwitch = new OO.ui.ToggleSwitchWidget({
                 value: true,
             }).on('change', function (toggleValue) {
-                $('#ecp-' + skin + ' .ecp-skin-toggle .oo-ui-labelElement-label').first().text(toggleValue ? 'Enabled' : 'Disabled');
-                $('#ecp-' + skin + ' .ecp-inputs input[type=color]').prop('disabled', !toggleValue);
+                $('#' + getSkinElementId(skin) + ' .ecp-skin-toggle .oo-ui-labelElement-label').first().text(toggleValue ? 'Enabled' : 'Disabled');
+                $('#' + getSkinElementId(skin) + ' .ecp-inputs input[type=color]').prop('disabled', !toggleValue);
             });
             var skinToggleLabel = new OO.ui.FieldLayout(skinToggleSwitch, {
                 label: 'Enabled',
@@ -351,7 +388,7 @@
             });
             skinToggleSwitches[skin] = skinToggleSwitch;
             var skinName = codeMirrorSkinNames[skin];
-            return $('<div>', { 'id': 'ecp-' + skin, 'class': 'ecp-codemirror-skin' }).append(
+            return $('<div>', { 'id': getSkinElementId(skin), 'class': 'ecp-codemirror-skin' }).append(
                 skinToggleLabel.$element,
                 $('<h2>').text(skinName),
                 $('<div>', { 'class': 'ecp-inputs-preview-wrapper' }).append(colorInputs, colorPreview)
@@ -409,8 +446,8 @@
             };
             codeMirrorSkins.forEach(function (skin) {
                 codeMirrorItems.forEach(function (item) {
-                    $('#ecp-' + skin + '__' + item).attr('value', defaultColors[item]);
-                    $('#ecp-' + skin + ' .ecp-preview  .ecp-' + item).css('color', defaultColors[item]);
+                    $('#' + getItemElementId(skin, item)).attr('value', defaultColors[item]);
+                    $('#' + getSkinElementId(skin) + ' .ecp-preview  .ecp-' + item).css('color', defaultColors[item]);
                 });
             });
         }
@@ -436,7 +473,7 @@
                     var skin = keyParts[0];
                     var item = keyParts[1];
                     $('#ecp-' + key).val(color);
-                    $('#ecp-' + skin + ' .ecp-preview  .ecp-' + item).css('color', color);
+                    $('#' + getSkinElementId(skin) + ' .ecp-preview  .ecp-' + item).css('color', color);
                 }
             }
         }
@@ -477,20 +514,22 @@
     }
 
     function addButton() {
-        var header;
         if (config.skin === 'fandomdesktop') {
-            header = $('.wiki-tools .wds-list');
-        }
-        if (header.length) {
-            var text = 'Editor Color Picker';
-            var href = '/wiki/Special:EditorColorPicker';
-            header.append(function () {
-                return $('<li>').append($('<a>', {
-                    href: href,
-                    id: 'ca-editorcolorpicker',
-                    text: text,
-                }));
-            });
+            var header = $('.wiki-tools .wds-list');
+            if (header.length) {
+                var text = 'Editor Color Picker';
+                var href = '/wiki/Special:EditorColorPicker';
+                header.append(function () {
+                    return $('<li>').append($('<a>', {
+                        href: href,
+                        id: 'ca-editorcolorpicker',
+                        text: text,
+                    }));
+                });
+            }
+        } else if (config.skin === 'vector') {
+            const p = mw.util.addPortlet('p-Editor_tools', 'Editor tools', '#p-tb');
+            const plink = mw.util.addPortletLink('p-Editor_tools', config.wgArticlePath.replace('$1', 'Special:EditorColorPicker'), 'Editor color picker', 'et-ecp', 'Change your editor colors with this tool.', null, null);
         }
     }
 
@@ -504,12 +543,18 @@
     }
 
     mw.hook('wikipage.content').add(function () {
-        if (window.ecpButton) {
+        console.log('content hook enter');
+        if (window.ecpButton
+            // && !config.wgCanonicalNamespace === 'Special'
+        ) {
+            console.log('add ecp button');
             addButton();
         }
         if (isEditorColorPickerPage()) {
+            console.log('add ecp page');
             loadEditorColorPickerPage();
         }
     });
+    console.log('closure enter');
 })(this, jQuery, mediaWiki);
 // </pre>
