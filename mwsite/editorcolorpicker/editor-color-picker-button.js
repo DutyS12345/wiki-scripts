@@ -27,7 +27,10 @@
 
     mw.hook('wikipage.content').add(function () {
         if (window.ecpButton) {
-            addButton();
+            mw.loader.using(['mediawiki.util'], function (require) {
+                var util = require('mediawiki.util');
+                addButton();
+            });
         }
     });
 })(this, jQuery, mediaWiki);

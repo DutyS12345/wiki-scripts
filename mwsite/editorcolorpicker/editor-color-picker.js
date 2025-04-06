@@ -540,7 +540,7 @@
     }
 
     function loadEditorColorPickerPage() {
-        mw.loader.using(['mediawiki.api', 'oojs-ui-core']).then(generateEditorColorPickerPage);
+        mw.loader.using(['mediawiki.api', 'mediawiki.util', 'oojs-ui-core']).then(generateEditorColorPickerPage);
     }
 
     mw.hook('wikipage.content').add(function () {
