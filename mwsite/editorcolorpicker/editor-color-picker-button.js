@@ -20,12 +20,12 @@ window.ecpButton = true;
                 });
             }
         } else if (config.skin === 'vector') {
-            const p = mw.util.addPortlet('p-Editor_tools', 'Editor tools', '#p-tb');
-            const plink = mw.util.addPortletLink('p-Editor_tools', config.wgArticlePath.replace('$1', 'Special:EditorColorPicker'), 'Editor color picker', 'et-ecp', 'Change your editor colors with this tool.', null, null);
+            var p = mw.util.addPortlet('p-Editor_tools', 'Editor tools', '#p-tb');
+            var plink = mw.util.addPortletLink('p-Editor_tools', config.wgArticlePath.replace('$1', 'Special:EditorColorPicker'), 'Editor color picker', 'et-ecp', 'Change your editor colors with this tool.', null, null);
         }
     }
 
-    mw.hook('wikipage.content').add(function () {
+    mw.hook('wikipage.content').add(function ($content) {
         if (window.ecpButton) {
             mw.loader.using(['mediawiki.util']).then(function (require) {
                 addButton();
