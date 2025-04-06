@@ -1,4 +1,3 @@
-window.ecpButton = true;
 // <pre>
 (function (window, $, mw) {
     'use strict';
@@ -13,7 +12,8 @@ window.ecpButton = true;
         'wgServerName',
         'wgSiteName',
         'wgUserName',
-        'wgArticlePath',
+        'wgScriptPath',
+        'wgScript',
         'skin',
     ]);
 
@@ -47,20 +47,20 @@ window.ecpButton = true;
             'table': 'Table',
         };
         var codeMirrorSkins = [
-            'vector-theme-dark',
-            'vector-theme-light',
+            'vector-wg-theme-dark',
+            'vector-wg-theme-light',
             // 'theme-fandomdesktop-dark', // Fandom only
             // 'theme-fandomdesktop-light', // Fandom only
         ];
         var codeMirrorSkinNames = {
-            'vector-theme-dark': 'Vector Dark',
-            'vector-theme-light': 'Vector Light',
+            'vector-wg-theme-dark': 'Vector Dark',
+            'vector-wg-theme-light': 'Vector Light',
             'theme-fandomdesktop-dark': 'FandomDesktop Dark',
             'theme-fandomdesktop-light': 'FandomDesktop Light',
         };
         var codeMirrorSkinSelectors = {
-            'wg-vector-theme-dark': '.skin-vector .wgl-theme-dark',
-            'wg-vector-theme-dark': '.skin-vector .wgl-theme-light',
+            'vector-wg-theme-dark': '.skin-vector.wgl-theme-dark',
+            'vector-wg-theme-light': '.skin-vector.wgl-theme-light',
             'theme-fandomdesktop-dark': '.theme-fandomdesktop-dark', // Fandom only
             'theme-fandomdesktop-light': '.theme-fandomdesktop-light', // Fandom only
         }
@@ -86,15 +86,15 @@ window.ecpButton = true;
         }
 
         function getSkinElementId(skin) {
-            return `ecp-${skin}`;
+            return 'ecp-' + skin;
         }
 
         function getItemElementId(skin, item) {
-            return `ecp-${skin}__${item}`;
+            return 'ecp-' + skin + '__' + item;
         }
 
         function getItemInputValue(skin, item) {
-            return $(`#${getItemElementId(skin, item)}`).val();
+            return $('#' + getItemElementId(skin, item)).val();
         }
 
         // save button
@@ -203,91 +203,91 @@ window.ecpButton = true;
                     '.cm-mw-template3-ground.cm-mw-template'
                 ],
                 'template-param': [
-                    '.cm-line .cm-mw-template-argument-name'
+                    '.cm-mw-template-argument-name'
                 ],
                 'parameter': [
-                    '.cm-line .cm-mw-templatevariable-bracket',
-                    '.cm-line .cm-mw-templatevariable-name',
-                    '.cm-line .cm-mw-templatevariable-delimiter',
-                    '.cm-line .cm-mw-templatevariable'
+                    '.cm-mw-templatevariable-bracket',
+                    '.cm-mw-templatevariable-name',
+                    '.cm-mw-templatevariable-delimiter',
+                    '.cm-mw-templatevariable'
                 ],
                 'link': [
-                    '.cm-line .cm-mw-extlink-bracket',
-                    '.cm-line .cm-mw-link-bracket',
-                    '.cm-line .cm-mw-link-delimiter'
+                    '.cm-mw-extlink-bracket',
+                    '.cm-mw-link-bracket',
+                    '.cm-mw-link-delimiter'
                 ],
                 'link-target': [
-                    '.cm-line .cm-mw-extlink-protocol',
-                    '.cm-line .cm-mw-extlink',
-                    '.cm-line .cm-mw-free-extlink-protocol',
-                    '.cm-line .cm-mw-free-extlink',
-                    '.cm-line .cm-mw-link-pagename',
-                    '.cm-line .cm-mw-link',
-                    '.cm-line .cm-mw-link-tosection'
+                    '.cm-mw-extlink-protocol',
+                    '.cm-mw-extlink',
+                    '.cm-mw-free-extlink-protocol',
+                    '.cm-mw-free-extlink',
+                    '.cm-mw-link-pagename',
+                    '.cm-mw-link',
+                    '.cm-mw-link-tosection'
                 ],
                 'link-text': [
-                    '.cm-line .cm-mw-extlink-text',
-                    '.cm-line .cm-mw-link-text'
+                    '.cm-mw-extlink-text',
+                    '.cm-mw-link-text'
                 ],
                 'parser-func': [
-                    '.cm-line .cm-mw-parserfunction-bracket',
-                    '.cm-line .cm-mw-parserfunction-name',
-                    '.cm-line .cm-mw-parserfunction-delimiter'
+                    '.cm-mw-parserfunction-bracket',
+                    '.cm-mw-parserfunction-name',
+                    '.cm-mw-parserfunction-delimiter'
                 ],
                 'tag': [
-                    '.cm-line .cm-mw-htmltag-bracket',
-                    '.cm-line .cm-mw-htmltag-name',
-                    '.cm-line .cm-mw-exttag-bracket',
-                    '.cm-line .cm-mw-exttag-name'
+                    '.cm-mw-htmltag-bracket',
+                    '.cm-mw-htmltag-name',
+                    '.cm-mw-exttag-bracket',
+                    '.cm-mw-exttag-name'
                 ],
                 'tag-attr': [
-                    '.cm-line .cm-mw-htmltag-attribute',
-                    '.cm-line .cm-mw-exttag-attribute'
+                    '.cm-mw-htmltag-attribute',
+                    '.cm-mw-exttag-attribute'
                 ],
                 'entity': [
-                    '.cm-line .cm-mw-mnemonic'
+                    '.cm-mw-mnemonic'
                 ],
                 'comment': [
-                    '.cm-line .cm-mw-comment'
+                    '.cm-mw-comment'
                 ],
                 'markup': [
-                    '.cm-line .cm-mw-apostrophes-bold',
-                    '.cm-line .cm-mw-apostrophes-italic',
-                    '.cm-line .cm-mw-section-header',
-                    '.cm-line .cm-mw-hr',
-                    '.cm-line .cm-mw-signature',
-                    '.cm-line .cm-mw-list',
-                    '.cm-line .cm-mw-indenting',
-                    '.cm-line .cm-mw-doubleUnderscore'
+                    '.cm-mw-apostrophes-bold',
+                    '.cm-mw-apostrophes-italic',
+                    '.cm-mw-section-header',
+                    '.cm-mw-hr',
+                    '.cm-mw-signature',
+                    '.cm-mw-list',
+                    '.cm-mw-indenting',
+                    '.cm-mw-doubleUnderscore'
                 ],
                 'table': [
-                    '.cm-line .cm-mw-table-bracket',
-                    '.cm-line .cm-mw-table-definition',
-                    '.cm-line .cm-mw-table-delimiter'
+                    '.cm-mw-table-bracket',
+                    '.cm-mw-table-definition',
+                    '.cm-mw-table-delimiter'
                 ],
             };
             var cssText = '';
             for (var i = 0; i < codeMirrorSkins.length; i++) {
                 var skin = codeMirrorSkins[i];
-                var skinDisabled = $(`#${getSkinElementId(skin)} .ecp-skin-toggle .oo-ui-toggleWidget`).attr('aria-checked') === 'false';
-                cssText += `/* ${codeMirrorSkinNames[skin]}${skinDisabled ? ' disabled' : ''} */\n`;
+                var skinDisabled = $('#' + getSkinElementId(skin) + ' .ecp-skin-toggle .oo-ui-toggleWidget').attr('aria-checked') === 'false';
+                cssText += '/* ' + codeMirrorSkinNames[skin] + (skinDisabled ? ' disabled' : '') + ' */\n';
 
                 for (var j = 0; j < codeMirrorItems.length; j++) {
                     var item = codeMirrorItems[j];
-                    let itemCssText = '';
+                    var itemCssText = '';
                     if (skinDisabled) {
-                        itemCssText += `'/* ${skin} ${item} */\n`
-                        itemCssText += `\t/* color: ${getItemInputValue(skin, item)}; */\n`;
+                        itemCssText += '/* ' + skin + ' ' + item + ' */\n';
+                        itemCssText += '\t/* color: ' + getItemInputValue(skin, item) + '; */\n';
                     } else {
                         var selectors = codeMirrorSelectors[item];
                         for (var k = 0; k < selectors.length - 1; k++) {
-                            itemCssText += `${getSkinSelector(skin)} ${selectors[k]},\n`;
+                            itemCssText += getSkinSelector(skin) + ' ' + selectors[k] + ',\n';
                         }
-                        itemCssText += `${getSkinSelector(skin)} ${selectors[k]}`;
-                        itemCssText += ' {\n'
-                        itemCssText += `/* ${skin} ${item} */\n`
-                        itemCssText += `\tcolor: ${getItemInputValue(skin, item)};\n`
-                        itemCssText += `}\n`;
+                        itemCssText += getSkinSelector(skin) + ' ' + selectors[k];
+                        itemCssText += ' {\n';
+                        itemCssText += '/* ' + skin + ' ' + item + ' */\n';
+                        itemCssText += '\tcolor: ' + getItemInputValue(skin, item) + ';\n';
+                        itemCssText += '}\n';
                     }
                     cssText += itemCssText;
                 }
@@ -310,6 +310,22 @@ window.ecpButton = true;
         }
 
         // link button
+        function isAlreadyImportLinked(css, user) {
+            if (config.skin === 'fandomdesktop') {
+                return css.search('@import "' + config.wgScriptPath + '\/load\.php[?]articles=User:' + user + '\/editorcolor\.css&only=styles&mode=articles";') >= 0;
+            } else {
+                return css.search('@import "' + config.wgScript + '[?]title=User:' + user + '/editorcolor\.css&action=raw&ctype=text/css";') >= 0;
+            }
+        }
+
+        function getImportLink(user) {
+            if (config.skin === 'fandomdesktop') {
+                return '@import "' + config.wgScriptPath + '/load.php?articles=User:' + user + '/editorcolor.css&only=styles&mode=articles";\n';
+            } else {
+                return '@import "' + config.wgScript + '?title=User:' + user + '/editorcolor.css&action=raw&ctype=text/css";\n';
+            }
+        }
+
         function linkCodeMirrorColors() {
             var api = new mw.Api();
             api.get({
@@ -319,11 +335,11 @@ window.ecpButton = true;
             }).done(function (data) {
                 var css = data.parse.wikitext["*"];
                 var user = config.wgUserName.replace(' ', '_');
-                if (css.search('@import "\/load\.php[?]articles=User:' + user + '\/editorcolor\.css&only=styles&mode=articles";') < 0) {
+                if (!isAlreadyImportLinked(css, user)) {
                     api.postWithEditToken({
                         action: 'edit',
                         title: 'User:' + config.wgUserName + '/common.css',
-                        prependtext: '@import "/load.php?articles=User:' + user + '/editorcolor.css&only=styles&mode=articles";\n'
+                        prependtext: getImportLink(user)
                     }).done(function (data) {
                         mw.loader.using('mediawiki.notification', function () {
                             mw.notification.notify('Linked Code Mirror colors to User:' + user + '/common.css', { tag: 'ecp-CM-link', type: 'success' });
@@ -343,7 +359,7 @@ window.ecpButton = true;
                 api.postWithEditToken({
                     action: 'edit',
                     title: 'User:' + config.wgUserName + '/common.css',
-                    prependtext: '@import "/load.php?articles=User:' + user + '/editorcolor.css&only=styles&mode=articles";\n'
+                    prependtext: getImportLink(user)
                 }).done(function (data) {
                     mw.loader.using('mediawiki.notification', function () {
                         mw.notification.notify('Linked Code Mirror colors to User:' + user + '/common.css', { tag: 'ecp-CM-link', type: 'success' });
@@ -453,17 +469,22 @@ window.ecpButton = true;
         }
         loadDefaultColors();
 
-        // preview background color & text color
-        $.get(mw.util.wikiScript('wikia') + '?controller=ThemeApi&method=themeVariables&variant=dark').done(function (data) {
-            var bgcolor = data.match(/--theme-page-background-color:(#[a-f0-9].*?);/)[1];
-            var textcolor = data.match(/--theme-page-text-color:(#[a-f0-9].*?);/)[1];
-            $('#ecp-theme-fandomdesktop-dark .ecp-preview-box').css({ 'background-color': bgcolor, 'color': textcolor });
-        });
-        $.get(mw.util.wikiScript('wikia') + '?controller=ThemeApi&method=themeVariables&variant=light').done(function (data) {
-            var bgcolor = data.match(/--theme-page-background-color:(#[a-f0-9].*?);/)[1];
-            var textcolor = data.match(/--theme-page-text-color:(#[a-f0-9].*?);/)[1];
-            $('#ecp-theme-fandomdesktop-light .ecp-preview-box').css({ 'background-color': bgcolor, 'color': textcolor });
-        });
+        function updatePreviewBackgroundColors() {
+            if (config.skin === 'fandomdesktop') {
+                // preview background color & text color
+                $.get(mw.util.wikiScript('wikia') + '?controller=ThemeApi&method=themeVariables&variant=dark').done(function (data) {
+                    var bgcolor = data.match(/--theme-page-background-color:(#[a-f0-9].*?);/)[1];
+                    var textcolor = data.match(/--theme-page-text-color:(#[a-f0-9].*?);/)[1];
+                    $('#ecp-theme-fandomdesktop-dark .ecp-preview-box').css({ 'background-color': bgcolor, 'color': textcolor });
+                });
+                $.get(mw.util.wikiScript('wikia') + '?controller=ThemeApi&method=themeVariables&variant=light').done(function (data) {
+                    var bgcolor = data.match(/--theme-page-background-color:(#[a-f0-9].*?);/)[1];
+                    var textcolor = data.match(/--theme-page-text-color:(#[a-f0-9].*?);/)[1];
+                    $('#ecp-theme-fandomdesktop-light .ecp-preview-box').css({ 'background-color': bgcolor, 'color': textcolor });
+                });
+            }
+        }
+        updatePreviewBackgroundColors();
 
         function updateColors(colors) {
             for (var key in colors) {
@@ -513,48 +534,19 @@ window.ecpButton = true;
         return;
     }
 
-    function addButton() {
-        if (config.skin === 'fandomdesktop') {
-            var header = $('.wiki-tools .wds-list');
-            if (header.length) {
-                var text = 'Editor Color Picker';
-                var href = '/wiki/Special:EditorColorPicker';
-                header.append(function () {
-                    return $('<li>').append($('<a>', {
-                        href: href,
-                        id: 'ca-editorcolorpicker',
-                        text: text,
-                    }));
-                });
-            }
-        } else if (config.skin === 'vector') {
-            const p = mw.util.addPortlet('p-Editor_tools', 'Editor tools', '#p-tb');
-            const plink = mw.util.addPortletLink('p-Editor_tools', config.wgArticlePath.replace('$1', 'Special:EditorColorPicker'), 'Editor color picker', 'et-ecp', 'Change your editor colors with this tool.', null, null);
-        }
-    }
-
     function isEditorColorPickerPage() {
         return config.wgPageName === config.wgFormattedNamespaces[-1] + ':EditorColorPicker'
             || config.wgCanonicalSpecialPageName === 'Blankpage' && new URLSearchParams(window.location.search).get('blankspecial') === 'editorcolorpicker';
     }
 
     function loadEditorColorPickerPage() {
-        mw.loader.using(['mediawiki.api', 'oojs-ui']).then(generateEditorColorPickerPage);
+        mw.loader.using(['mediawiki.api', 'oojs-ui-core']).then(generateEditorColorPickerPage);
     }
 
     mw.hook('wikipage.content').add(function () {
-        console.log('content hook enter');
-        if (window.ecpButton
-            // && !config.wgCanonicalNamespace === 'Special'
-        ) {
-            console.log('add ecp button');
-            addButton();
-        }
         if (isEditorColorPickerPage()) {
-            console.log('add ecp page');
             loadEditorColorPickerPage();
         }
     });
-    console.log('closure enter');
 })(this, jQuery, mediaWiki);
 // </pre>
