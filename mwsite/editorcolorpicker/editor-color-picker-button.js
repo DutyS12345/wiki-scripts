@@ -27,8 +27,7 @@ window.ecpButton = true;
 
     mw.hook('wikipage.content').add(function () {
         if (window.ecpButton) {
-            mw.loader.using(['mediawiki.util'], function (require) {
-                // var util = require('mediawiki.util');
+            mw.loader.using(['mediawiki.util']).then(function (require) {
                 addButton();
             });
         }
