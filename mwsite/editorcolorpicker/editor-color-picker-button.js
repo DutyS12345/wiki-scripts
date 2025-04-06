@@ -1,9 +1,9 @@
 // <pre>
 // window.ecpButton = true;
 (function () {
-
     var config = mw.config.get([
         'wgArticlePath',
+        'skin',
     ]);
     function addButton() {
         if (config.skin === 'fandomdesktop') {
