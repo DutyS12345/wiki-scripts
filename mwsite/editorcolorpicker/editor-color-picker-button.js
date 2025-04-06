@@ -1,6 +1,6 @@
 // <pre>
-// window.ecpButton = true;
-(function () {
+window.ecpButton = true;
+(function (window, $, mw) {
     var config = mw.config.get([
         'wgArticlePath',
         'skin',
@@ -28,7 +28,7 @@
     mw.hook('wikipage.content').add(function () {
         if (window.ecpButton) {
             mw.loader.using(['mediawiki.util'], function (require) {
-                var util = require('mediawiki.util');
+                // var util = require('mediawiki.util');
                 addButton();
             });
         }

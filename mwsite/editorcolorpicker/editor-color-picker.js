@@ -19,7 +19,9 @@
 
     function generateEditorColorPickerPage() {
         // CSS styles
-        // importArticle({type: 'style', article: 'u:dev:MediaWiki:EditorColorPicker.css'}); // Fandom-only. 
+        // Fandom-only. Otherwise, add CSS through ResourceLoader using gadgets. If all else fails use mw.util.addCSS().
+        // importArticle({type: 'style', article: 'u:dev:MediaWiki:EditorColorPicker.css'});
+
         var codeMirrorItems = [
             'template-t1', 'template-t2', 'template-t3', 'template-param',
             'parameter',
@@ -61,8 +63,8 @@
         var codeMirrorSkinSelectors = {
             'vector-wg-theme-dark': '.skin-vector.wgl-theme-dark',
             'vector-wg-theme-light': '.skin-vector.wgl-theme-light',
-            'theme-fandomdesktop-dark': '.theme-fandomdesktop-dark', // Fandom only
-            'theme-fandomdesktop-light': '.theme-fandomdesktop-light', // Fandom only
+            'theme-fandomdesktop-dark': '.theme-fandomdesktop-dark',
+            'theme-fandomdesktop-light': '.theme-fandomdesktop-light',
         }
         var codeMirrorPreviewText =
             '<span class="ecp-template-t1">{{template1|</span><span class="ecp-template-t2">{{template2|</span><span class="ecp-template-t3">{{template3|test3}}</span><span class="ecp-template-t2">|test2}}</span><span class="ecp-template-t1">|test1}}</span>\n' +
