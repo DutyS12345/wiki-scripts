@@ -1,4 +1,3 @@
-// <pre>
 (function (window, $, mw) {
     if (window.gadgetNavLinks) return;
     window.gadgetNavLinks = true;
@@ -8,40 +7,30 @@
         'wgPageName',
     ]);
 
+    function gadgetLink(name) {
+        var link = document.createElement('a');
+        link.append(name);
+        link.href = mw.util.getUrl('MediaWiki:Gadget-' + name, { action: 'edit' });
+        return link;
+    }
+
     function generateNavLinks() {
-        var gadgetDefinitions = document.querySelectorAll('#mw-content-text li:not(.navlink-loaded)');
-        console.log(gadgetDefinitions);
+        var gadgetDefinitions = document.querySelectorAll('#bodyContent ul:not(#toc ul) > li:not(.navlink-loaded)');
         for (var gadgetDefinition of gadgetDefinitions) {
-            console.log('raw ' + gadgetDefinition.textContent);
             if (gadgetDefinition.textContent) {
                 // maps[ResourceLoader|type=general|default]|maps.js
-                var match = gadgetDefinition.textContent.match(/^(\s*)(.+)(\[.*?\])\|(.*?)$/);
-
-                gadgetDefinition.textContent = '';
-                console.log(match);
-                var space = match[1];
-                gadgetDefinition.appendChild(document.createTextNode(space));
-                var gadgetName = match[2];
-                var gadgetPageUrl = mw.util.getUrl('MediaWiki:Gadget-' + gadgetName, { action: 'edit' });
-                var gadgetNameLink = document.createElement('a');
-                gadgetNameLink.appendChild(document.createTextNode(gadgetName));
-                gadgetNameLink.href = gadgetPageUrl;
-                gadgetDefinition.appendChild(gadgetNameLink);
-                var gadgetConfig = match[3];
-                gadgetDefinition.appendChild(document.createTextNode(gadgetConfig));
-                var gadgetResources = match[4].split('|');
-                for (var gadgetResource of gadgetResources) {
-                    if (gadgetResource.length > 0) {
-                        var gadgetResourceUrl = mw.util.getUrl('MediaWiki:Gadget-' + gadgetResource, { action: 'edit' });
-                        var gadgetResourceLink = document.createElement('a');
-                        gadgetResourceLink.appendChild(document.createTextNode(gadgetResource));
-                        gadgetResourceLink.href = gadgetResourceUrl;
-                        gadgetDefinition.appendChild(document.createTextNode('|'));
-                        gadgetDefinition.appendChild(gadgetResourceLink);
-                    }
+                const match = gadgetDefinition.textContent.replaceAll(' ', '').match(/^([A-Za-z][A-Za-z0-9-_.]*)(\[.*?\])\|(.*?)$/);
+                if (!match) {
+                    continue;
                 }
-                gadgetDefinition.classList.add('navlink-loaded');
+                gadgetDefinition.textContent = '';
+                const [fullMatch, gadgetName, gadgetConfig, gadgetResources] = match;
+                gadgetDefinition.append(gadgetLink(gadgetName), gadgetConfig);
+                gadgetResources.split('|')
+                    .filter(resource => resource.length > 0)
+                    .forEach(resource => gadgetDefinition.append('|', gadgetLink(resource)));
             }
+            gadgetDefinition.classList.add('navlink-loaded');
         }
     }
 
@@ -51,4 +40,3 @@
         });
     }
 })(this, jQuery, mediaWiki);
-// </pre>
