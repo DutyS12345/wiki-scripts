@@ -10,7 +10,7 @@
     function gadgetLink(name) {
         var link = document.createElement('a');
         link.append(name);
-        link.href = mw.util.getUrl('MediaWiki:Gadget-' + name, { action: 'edit' });
+        link.href = mw.util.getUrl(config.wgFormattedNamespaces[8] + ':Gadget-' + name, { action: 'edit' });
         return link;
     }
 
