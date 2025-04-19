@@ -115,7 +115,7 @@
                 if (category !== '') {
                     var update = {
                         type: updateRow.type.getValue()
-                    }
+                    };
                     if (update.type === 'add') {
                         update.newCategory = category;
                     } else if (update.type === 'remove') {
@@ -125,9 +125,10 @@
                         const categoryFind = updateRow.categoryFind.getValue().replaceAll('_', '').trim();
                         update.oldCategory = categoryFind;
                     }
+                    return update;
                 }
-                return update;
-            }
+                return undefined;
+            };
             return updateRow;
         }
 
@@ -222,12 +223,12 @@
                 }
             },
             getCategoryUpdates: function () {
-                const updateList = categoryRows.map(updateRow => updateRow.getUpdate());
+                const updateList = categoryRows.map(updateRow => updateRow.getUpdate()).filter(update => update !== undefined);
                 var updates = {
                     addUpdates: [],
                     removeUpdates: [],
                     replaceUpdates: [],
-                }
+                };
                 for (const update of updateList) {
                     if (update.type === 'add' && update.newCategory.trim() !== '') {
                         updates.addUpdates.push(update);
@@ -240,11 +241,11 @@
                 return updates;
             },
             getOptions: function () {
-                var ret = {
+                let ret = {
                     'noinclude': false,
                     'case-sensitive': false,
                     'suppress-edit-summary': false
-                }
+                };
                 let checkboxes = options.fieldWidget.findSelectedItemsData();
                 for (let checkbox of checkboxes) {
                     ret[checkbox] = true;
@@ -252,7 +253,7 @@
                 return ret;
             },
             printStatusMessage: (message) => statusMessage.append(message),
-        }
+        };
         panel.addCategoryRow();
         addCategoryRowButton.on('click', () => panel.addCategoryRow());
         removeCategoryRowButton.on('click', () => panel.removeCategoryRow());
@@ -273,7 +274,7 @@
         var paused = true;
         startStopButton.onClick = function () {
             if (paused) {
-                startCategorize()
+                startCategorize();
             } else {
                 stopCategorize();
             }
@@ -341,9 +342,9 @@
                     for (let replaceUpdate of replaceUpdates) {
                         const matchCat = caseSensitive ? capitalizeFirst(replaceUpdate.oldCategory) : replaceUpdate.oldCategory.toLowerCase();
                         if (categorySet.has(matchCat)) {
-                            const regex = buildCategoryRegex(categoryAliases, replaceUpdate.oldCategory,)
+                            const regex = buildCategoryRegex(categoryAliases, replaceUpdate.oldCategory, caseSensitive);
                             pageText = pageText.replaceAll(regex, '[[$1:' + replaceUpdate.newCategory + ']]');
-                            changes.push("Replaced " + categoryAliases[0] + ":" + replaceUpdate.oldCategory + " with " + categoryAliases[0] + ":" + replaceUpdate.newCategory)
+                            changes.push("Replaced " + categoryAliases[0] + ":" + replaceUpdate.oldCategory + " with " + categoryAliases[0] + ":" + replaceUpdate.newCategory);
                         }
                     }
                     for (let removeUpdate of removeUpdates) {
@@ -360,7 +361,7 @@
                         if (!categorySet.has(matchCat)) {
                             const newCategoryLink = '[[' + categoryAliases[0] + ':' + addUpdate.newCategory + ']]';
                             linksToAdd += newCategoryLink;
-                            changes.push("Added " + categoryAliases[0] + ":" + addUpdate.newCategory)
+                            changes.push("Added " + categoryAliases[0] + ":" + addUpdate.newCategory);
                         }
                     }
                     if (linksToAdd.length !== 0) {
@@ -392,7 +393,7 @@
                     }
                 }, (error) => {
                     panel.printStatusMessage('Could not get ' + currentPage + ' ' + error.message);
-                    setTimeout(() => process(updates, options), 2000)
+                    setTimeout(() => process(updates, options), 2000);
                 });
         }
 
