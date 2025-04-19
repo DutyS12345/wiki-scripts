@@ -1,6 +1,7 @@
 // <pre>
 window.ecpButton = true;
 (function (window, $, mw) {
+    'use strict';
     var config = mw.config.get([
         'wgArticlePath',
         'skin',

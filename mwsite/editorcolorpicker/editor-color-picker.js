@@ -415,7 +415,7 @@
 
         // main page
         $('.page-header__title').text('Editor Color Picker'); // Page header text
-        $('.page-heading > .firstHeading').text('Editor Color Picker'); // Page header text
+        $('#firstHeading').text('Editor Color Picker'); // Page header text
         document.title = 'Editor Color Picker' + ' | ' + config.wgSiteName; // Page title
         var mwContentText = $('#mw-content-text'); // Page content
         mwContentText.empty();

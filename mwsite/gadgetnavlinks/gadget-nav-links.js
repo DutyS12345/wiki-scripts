@@ -1,4 +1,5 @@
 (function (window, $, mw) {
+    'use strict';
     if (window.gadgetNavLinks) return;
     window.gadgetNavLinks = true;
 
