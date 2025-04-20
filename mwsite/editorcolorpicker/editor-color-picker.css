@@ -6,6 +6,9 @@
 
 .ecp-inputs {
     flex: 1 1 auto;
+    display: flex;
+    flex-flow: column;
+    gap: 0.2em;
 }
 
 .ecp-preview {
