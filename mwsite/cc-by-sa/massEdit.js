@@ -176,10 +176,18 @@
             statusMessage.$element.append(msg).append('<br />');
             modal.updateSize();
         };
+        statusMessage.scrollToBottom = function () {
+            let messageElement = statusMessage.$element.get(0);
+            messageElement.scrollTop = messageElement.scrollHeight;
+        }
         statusMessage.clear = function () {
             statusMessage.$element.empty();
             modal.updateSize();
         };
+        statusMessage.$element.css({
+            'max-height': '12vh',
+            'box-sizing': 'border-box',
+        });
 
         var findReplacePanelContent = new OO.ui.PanelLayout({ padded: true, scrollable: false, expanded: false });
 
@@ -228,7 +236,10 @@
             },
             getPageSelectionText: () => pageSelection.fieldWidget.getValue(),
             getEditSummaryText: () => editSummary.fieldWidget.getValue(),
-            printStatusMessage: (message) => statusMessage.append(message),
+            printStatusMessage: (message) => {
+                statusMessage.append(message);
+                statusMessage.scrollToBottom();
+            },
             clearInputs: () => {
                 inputListType.fieldWidget.setValue('Pages');
                 useRegexCheckbox.fieldWidget.setSelected(false);
@@ -455,17 +466,33 @@
         findResults.append = function (msg) {
             findResults.$element.append(msg).append('<br />');
         };
+        findResults.scrollToBottom = function () {
+            let messageElement = findResults.$element.get(0);
+            messageElement.scrollTop = messageElement.scrollHeight;
+        }
         findResults.clear = function () {
             findResults.$element.empty();
         };
+        findResults.$element.css({
+            'max-height': '12vh',
+            'box-sizing': 'border-box',
+        });
 
         var statusMessage = new OO.ui.PanelLayout({ padded: true, expanded: false, framed: true, scrollable: true });
         statusMessage.append = function (msg) {
             statusMessage.$element.append(msg).append('<br />');
         };
+        statusMessage.scrollToBottom = function () {
+            let messageElement = statusMessage.$element.get(0);
+            messageElement.scrollTop = messageElement.scrollHeight;
+        }
         statusMessage.clear = function () {
             statusMessage.$element.empty();
         };
+        statusMessage.$element.css({
+            'max-height': '12vh',
+            'box-sizing': 'border-box',
+        });
 
         var findPanelContent = new OO.ui.PanelLayout({ padded: true, scrollable: false, expanded: false });
 
@@ -497,8 +524,14 @@
             getRedirectFilter: () => redirectFilter.fieldWidget.getValue(),
             getFindText: () => findInput.fieldWidget.getValue(),
             getPageSelectionText: () => pageSelection.fieldWidget.getValue(),
-            printFindResult: (message) => findResults.append(message),
-            printStatusMessage: (message) => statusMessage.append(message),
+            printFindResult: (message) => {
+                findResults.append(message);
+                findResults.scrollToBottom();
+            },
+            printStatusMessage: (message) => {
+                statusMessage.append(message);
+                statusMessage.scrollToBottom();
+            },
             clearInputs: () => {
                 inputListType.fieldWidget.setValue('Pages');
                 useRegexCheckbox.fieldWidget.setSelected(false);
@@ -707,9 +740,17 @@
         statusMessage.append = function (msg) {
             statusMessage.$element.append(msg).append('<br />');
         };
+        statusMessage.scrollToBottom = function () {
+            let messageElement = statusMessage.$element.get(0);
+            messageElement.scrollTop = messageElement.scrollHeight;
+        }
         statusMessage.clear = function () {
             statusMessage.$element.empty();
         };
+        statusMessage.$element.css({
+            'max-height': '12vh',
+            'box-sizing': 'border-box',
+        });
 
         var simpleEditPanelContent = new OO.ui.PanelLayout({ padded: true, scrollable: false, expanded: false });
 
@@ -738,7 +779,10 @@
             getEditInputText: () => editInput.fieldWidget.getValue(),
             getPageSelectionText: () => pageSelection.fieldWidget.getValue(),
             getEditSummaryText: () => editSummary.fieldWidget.getValue(),
-            printStatusMessage: (message) => statusMessage.append(message),
+            printStatusMessage: (message) => {
+                statusMessage.append(message);
+                statusMessage.scrollToBottom();
+            },
             clearInputs: () => {
                 inputListType.fieldWidget.setValue('Pages');
                 redirectFilter.fieldWidget.setValue('all');
