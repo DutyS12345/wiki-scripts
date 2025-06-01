@@ -1,7 +1,8 @@
 The contributions in this folder are adaptations of content licensed under CC BY-SA 3.0 (unported).
 https://creativecommons.org/licenses/by-sa/3.0/legalcode
 
-The contributions made here are licensed under CC BY-SA 4.0 as well as GPLv3 (see license in root), as CC BY-SA licenses are one-way compatible with future versions, and CC BY-SA 4.0 is one-way compatible with GPLv3.
+The contributions made here are licensed under CC BY-SA 4.0 as well as GPLv3 (see license in root),
+as CC BY-SA licenses are one-way compatible with future versions, and CC BY-SA 4.0 is one-way compatible with GPLv3.
 https://creativecommons.org/share-your-work/licensing-considerations/compatible-licenses/
 
 The CC BY-SA 4.0 license is provided below.

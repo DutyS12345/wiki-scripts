@@ -1,4 +1,8 @@
 /**
+ * Mass Edit (w/o async/await)
+ * GPLv3 or later
+ * CC BY-SA 4.0 or later
+ * 
  * Adapted from Mass Edit by Eizen <dev.fandom.com/wiki/User_talk:Eizen>.
  * https://dev.fandom.com/wiki/MediaWiki:MassEdit/code.js
  * @external window.dev.modal
@@ -989,7 +993,6 @@
         for (let i = 0; i < pages.length; i += 50) {
             let pageBatch = pages.slice(i, i + 50);
             let resultPages = yield getPageRevisionBatch(pageBatch, additionalParams);
-            console.log(resultPages);
             for (const pageId in resultPages) {
                 const page = resultPages[pageId];
                 if (!seen.add(page.pageid)) continue;
@@ -1005,11 +1008,13 @@
             prop: "revisions",
             rvprop: "timestamp|content|size",
             rvslots: "*",
-            rvlimit: "1",
             titles: pages.join('|'),
             format: "json",
             formatversion: "2",
         };
+        if (pages.length == 1) {
+            params.rvlimit = "1";
+        }
         if (additionalParams) {
             Object.assign(params, additionalParams);
         }
@@ -1086,7 +1091,6 @@
                 if (namespaceMemberPromise.done) break;
                 const resultPages = yield namespaceMemberPromise.value;
                 for (const page of resultPages) {
-                    console.log(page);
                     if (!seen.add(page.pageid)) continue;
                     yield handlePage(page);
                 }

@@ -1,4 +1,8 @@
 /**
+ * Mass Edit
+ * GPLv3 or later
+ * CC BY-SA 4.0 or later
+ * 
  * Adapted from Mass Edit by Eizen <dev.fandom.com/wiki/User_talk:Eizen>.
  * https://dev.fandom.com/wiki/MediaWiki:MassEdit/code.js
  * @external window.dev.modal
@@ -959,11 +963,13 @@
             prop: "revisions",
             rvprop: "timestamp|content|size",
             rvslots: "*",
-            rvlimit: "1",
             titles: pages.join('|'),
             format: "json",
             formatversion: "2",
         };
+        if (pages.length <= 1) {
+            params.rvlimit = "1";
+        }
         if (additionalParams) {
             Object.assign(params, additionalParams);
         }
