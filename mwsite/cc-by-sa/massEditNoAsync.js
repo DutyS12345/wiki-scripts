@@ -322,8 +322,7 @@
                                     // 8 per minute for anon users
                                     // await delay(7500);
                                     // 90 per minute for autoconfirmed
-                                    delay(700);
-                                    return response;
+                                    return delay(700).then(() => response);
                                 })
                                 .then(editResponse => resolve(editResponse), error => {
                                     console.error(error);
@@ -478,6 +477,14 @@
             let messageElement = findResults.$element.get(0);
             messageElement.scrollTop = messageElement.scrollHeight;
         }
+        findResults.isScrolledToBottom = function () {
+            let messageElement = findResults.$element.get(0);
+            if (messageElement.scrollTop == messageElement.scrollHeight) {
+                return true;
+            } else {
+                return false;
+            }
+        }
         findResults.clear = function () {
             findResults.$element.empty();
         };
@@ -533,8 +540,11 @@
             getFindText: () => findInput.fieldWidget.getValue(),
             getPageSelectionText: () => pageSelection.fieldWidget.getValue(),
             printFindResult: (message) => {
+                let isScrolledToBottom = findResults.isScrolledToBottom();
                 findResults.append(message);
-                findResults.scrollToBottom();
+                if (isScrolledToBottom) {
+                    findResults.scrollToBottom();
+                }
             },
             printStatusMessage: (message) => {
                 statusMessage.append(message);
@@ -601,7 +611,7 @@
                         skipCount++;
                         panel.printStatusMessage("Failed to get revision for " + title);
                     } else {
-                        if (findRegex.test(revision.content)) {
+                        if (revision.content.search(findRegex) >= 0) {
                             foundCount++;
                             panel.printFindResult(title);
                             panel.printStatusMessage("Found " + title + " {pageid:" + pageid + ",ns:" + ns + "}");
@@ -868,8 +878,7 @@
                                 // 8 per minute for anon users
                                 // await delay(7500);
                                 // 90 per minute for autoconfirmed
-                                delay(700);
-                                return response;
+                                return delay(700).then(() => response);
                             })
                             .then(editResponse => resolve(editResponse), error => {
                                 console.error(error);
