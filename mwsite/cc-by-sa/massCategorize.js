@@ -320,7 +320,7 @@
                     const revision = page && page.revisions && page.revisions[0] && page.revisions[0].slots ? page.revisions[0].slots.main : undefined;
                     // const categories = page?.categories;
                     var skipCount = 0;
-                    const categories = page && page.categories ? page.categories : undefined;
+                    const categories = page && page.categories ? page.categories : []; // no categories if not present
                     if (missing || revision === undefined || categories === undefined) { // error missing page, revision, or categories;
                         skipCount++;
                         panel.printStatusMessage("Failed to get revision and categories for " + title);
@@ -434,10 +434,10 @@
             format: "json",
             formatversion: "2",
         }).then(result => {
-            if (!(result && result.query && result.query.pages && result.query.pages[0])) {
+            if (!(result && result.query && result.query.pages && Object.keys(result.query.pages).length > 0)) {
                 throw new Error("Failed to get page revisions for page " + title);
             }
-            const resultPages = result.query.pages[0];
+            const resultPages = Object.values(result.query.pages)[0];
             return resultPages;
         });
     }
